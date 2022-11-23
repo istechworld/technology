@@ -1,0 +1,24 @@
+---
+ - hosts: all
+   become: true
+   vars:
+    package: httpd
+    vimpackage: vim
+   tasks:
+     - name: install vim
+       yum:
+        name: {{vimpackage}}
+        state: present
+     - name: install webserver
+       yum:
+        name: {{package}}
+        state: present  
+     - name: get uptime
+       shell: /usr/bin/uptime
+       register: result
+     - name: debug module to print messages
+       debug:
+        #var: result
+        msg: "print uptime of each host is (result.stdout)"
+       when: ansible_os_family == "windows"
+
